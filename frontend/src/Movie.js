@@ -61,7 +61,26 @@ function Movie() {
                 <Grid item xs={6}>
                     <div>
                         {valueRef.current.value?<h1>Results for "{valueRef.current.value}":</h1>:<h1>Waiting on search</h1>}
-                        {movies.map(movie=><li key={movie}>{movie} <Button onClick={()=>nominate(movie)} variant="contained" color="primary">Nominate</Button></li>)}
+                        <List>
+                            {
+                            movies.map(
+                                (movie)=>{
+                                    return(
+                                    <ListItem 
+                                    key={movie}>
+                                        <ListItemText>
+                                            {movie} 
+                                        </ListItemText>
+                                        <Button 
+                                        onClick={()=>nominate(movie)} 
+                                        variant="contained" 
+                                        color="primary">
+                                            Nominate
+                                        </Button>
+                                    </ListItem>)
+                                })
+                            }
+                        </List>
                     </div>
                 </Grid>
                 <Grid item xs={6}>
@@ -73,7 +92,9 @@ function Movie() {
                                 (nominee)=>{
                                     return (<ListItem
                                     key={nominee}>
-                                        {nominee}  
+                                        <ListItemText>
+                                            {nominee}  
+                                        </ListItemText>
                                         <Button 
                                         onClick={()=>remove(nominee)} 
                                         variant="contained" 
