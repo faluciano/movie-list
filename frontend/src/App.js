@@ -1,11 +1,11 @@
 import './App.css';
 import Movie from './Movie';
-
+import Typography from '@material-ui/core/Typography';
 
 function App() {
   return (
     <div className="App">
-      <h1>Shopies</h1>
+      <Typography variant="h1">Shopies</Typography>
       <Movie/>
     </div>
   );

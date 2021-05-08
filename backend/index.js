@@ -45,7 +45,8 @@ app.get("/movie", (req,res)=>{
             s:movie,
         }
     })
-        .then((response)=>process(response.data).then((val)=>res.send(val)))
+        .then((response)=>"Error" in response.data?res.send(""):(process(response.data)
+            .then((val)=>res.send(val))))
         .catch((error)=>res.send(error))
 });
 

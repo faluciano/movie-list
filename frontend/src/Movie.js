@@ -7,15 +7,16 @@ import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow:1,
+        flexGrow:3,
     },
     paper: {
-        padding: theme.spacing(2),
+        padding: theme.spacing(3),
         textAlign: 'center',
-        color: theme.palette.text.secondary,
     },
 }));
 
@@ -24,8 +25,6 @@ function Movie() {
     const [nominees, setNominees] = useState([]);
     const classes = useStyles();
     const valueRef = useRef('');
-
-
 
     function handleKey(event){
         if(event.key==='Enter' && valueRef.current.value!==''){
@@ -39,27 +38,28 @@ function Movie() {
             }
         })
         .then(response=>{
-            setMovies(
-                response.data.map((movie)=>{
+            setMovies(()=>{
+                if (response.data===''){
+                    return []
+                }
+                return (response.data.map((movie)=>{
                     return(
-                        <ListItem 
-                        alignItems="center"
-                        key={movie}>
-                            <ListItemText alignItems="center">
-                                {movie[0]} 
-                            </ListItemText>
-                            <ListItem alignItems="center">
-                                <Button 
-                                onClick={()=>nominate(movie[0])} 
-                                variant="contained" 
-                                color="primary">
-                                    Nominate
-                                </Button>
+                            <ListItem key={movie[0]}>
+                                <ListItemText>
+                                    <Typography variant="body1">{movie[0]}</Typography> 
+                                </ListItemText>
+                                <ListItemSecondaryAction>
+                                    <Button 
+                                    onClick={()=>nominate(movie[0])} 
+                                    variant="contained" 
+                                    color="primary">
+                                        <Typography variant="button">Nominate</Typography>
+                                    </Button>
+                                </ListItemSecondaryAction>
                             </ListItem>
-                        </ListItem>
                     )
-                })
-            )
+                }))
+            })
         });
     }
     function nominate(nominee){
@@ -68,20 +68,19 @@ function Movie() {
                 return prev;
             }
             return ([...prev, 
-                (<ListItem
-                key={nominee}>
-                    <ListItemText>
-                        {nominee}  
-                    </ListItemText>
-                    <ListItem>
-                        <Button 
-                        onClick={()=>remove(nominee)} 
-                        variant="contained" 
-                        color="secondary">
-                            Remove
-                        </Button>
-                    </ListItem>
-                </ListItem>)]
+                (<ListItem key={nominee}>
+                        <ListItemText>
+                            <Typography variant="body1">{nominee}</Typography>  
+                        </ListItemText>
+                        <ListItemSecondaryAction>
+                            <Button 
+                            onClick={()=>remove(nominee)} 
+                            variant="contained" 
+                            color="secondary">
+                                <Typography variant="button">Remove</Typography>
+                            </Button>
+                        </ListItemSecondaryAction>
+                    </ListItem>)]
             )
         });
     }
@@ -90,7 +89,7 @@ function Movie() {
     }
     return (
         <div className={classes.root}>
-            <Grid container spacing={3}>
+            <Grid container alignItems="flex-start" spacing={3}>
                 <Grid item xs={12}>
                     <TextField
                         onKeyDown={handleKey}
@@ -98,25 +97,24 @@ function Movie() {
                         fullWidth 
                         margin="normal" 
                         variant="outlined"
+                        className={classes.paper}
                     />
                 </Grid>
                 <Grid item xs={6}>
                     <div>
-                        {valueRef.current.value?<h1>Results for "{valueRef.current.value}":</h1>:<h1>Waiting on search</h1>}
-                        <List>
-                            {
-                            movies
-                            }
+                        <Typography variant="h3">
+                        {valueRef.current.value?`Results for "${valueRef.current.value}":`:`Waiting on search`}
+                        </Typography>
+                        <List className={classes.paper}>
+                            {movies}
                         </List>
                     </div>
                 </Grid>
                 <Grid item xs={6}>
                     <div>
-                        <h1>Nominations:</h1>
-                        <List>
-                            {
-                            nominees
-                            }
+                        <Typography variant="h3">Nominations:</Typography>
+                        <List className={classes.paper}>
+                            {nominees}
                         </List>
                     </div>
                 </Grid>
