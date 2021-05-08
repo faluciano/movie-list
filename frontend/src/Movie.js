@@ -41,7 +41,12 @@ function Movie() {
         .then(response=>setMovies(response.data));
     }
     function nominate(nominee){
-        setNominees(prev=>[...prev,nominee]);
+        setNominees(prev=>{
+            if(prev.includes(nominee)){
+                return [...prev]
+            } 
+            return [...prev,nominee]
+        });
     }
     function remove(nominee){
         setNominees(prev=>prev.filter(item=>item!==nominee));
