@@ -67,16 +67,19 @@ function Movie() {
                                 (movie)=>{
                                     return(
                                     <ListItem 
+                                    alignItems="center"
                                     key={movie}>
-                                        <ListItemText>
+                                        <ListItemText alignItems="center">
                                             {movie} 
                                         </ListItemText>
-                                        <Button 
-                                        onClick={()=>nominate(movie)} 
-                                        variant="contained" 
-                                        color="primary">
-                                            Nominate
-                                        </Button>
+                                        <ListItem alignItems="center">
+                                            <Button 
+                                            onClick={()=>nominate(movie)} 
+                                            variant="contained" 
+                                            color="primary">
+                                                Nominate
+                                            </Button>
+                                        </ListItem>
                                     </ListItem>)
                                 })
                             }
@@ -95,12 +98,14 @@ function Movie() {
                                         <ListItemText>
                                             {nominee}  
                                         </ListItemText>
-                                        <Button 
-                                        onClick={()=>remove(nominee)} 
-                                        variant="contained" 
-                                        color="secondary">
-                                            Nominate
-                                        </Button>
+                                        <ListItem>
+                                            <Button 
+                                            onClick={()=>remove(nominee)} 
+                                            variant="contained" 
+                                            color="secondary">
+                                                Remove
+                                            </Button>
+                                        </ListItem>
                                     </ListItem>
                                     )
                                 }
