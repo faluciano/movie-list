@@ -13,12 +13,14 @@ function process(data) {
 
 app.get("/", (req,res) => res.send("Hello World!"));
 app.get("/movie", (req,res)=>{
+    let movie = req.query.movie;
+    console.log(movie);
     axios.request({
         method:"post",
         url:"http://www.omdbapi.com/",
         params: {
             apikey:key,
-            s:"Umbrella"
+            s:movie,
         }
     })
         .then((response)=>res.send(process(response.data)))

@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import {makeStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,21 +21,72 @@ const useStyles = makeStyles((theme) => ({
 
 function Movie() {
     const [movies, setMovies] = useState([]);
+    const [nominees, setNominees] = useState([]);
     const classes = useStyles();
-    function getMovies(){
-        axios.get("/movie").then(response=>setMovies(response.data));
+    const valueRef = useRef('');
+
+
+
+    function handleKey(event){
+        if(event.key==='Enter' && valueRef.current.value!==''){
+            getMovies(valueRef.current.value);
+        }
+    }
+    function getMovies(movie){
+        axios.get("/movie", { 
+            params: {
+                movie: movie
+            }
+        })
+        .then(response=>setMovies(response.data));
+    }
+    function nominate(nominee){
+        setNominees(prev=>[...prev,nominee]);
+    }
+    function remove(nominee){
+        setNominees(prev=>prev.filter(item=>item!==nominee));
     }
     return (
         <div className={classes.root}>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <TextField margin="normal" variant="outlined"/>
+                    <TextField
+                        onKeyDown={handleKey}
+                        inputRef={valueRef} 
+                        fullWidth 
+                        margin="normal" 
+                        variant="outlined"
+                    />
                 </Grid>
                 <Grid item xs={6}>
-                    <h1>Movies are: {movies.map(movie=><li>{movie}</li>)}</h1>
+                    <div>
+                        {valueRef.current.value?<h1>Results for "{valueRef.current.value}":</h1>:<h1>Waiting on search</h1>}
+                        {movies.map(movie=><li key={movie}>{movie} <Button onClick={()=>nominate(movie)} variant="contained" color="primary">Nominate</Button></li>)}
+                    </div>
                 </Grid>
                 <Grid item xs={6}>
-                    <button onClick={getMovies}>Get Movies</button>
+                    <div>
+                        <h1>Nominations:</h1>
+                        <List>
+                            {
+                            nominees.map(
+                                (nominee)=>{
+                                    return (<ListItem
+                                    key={nominee}>
+                                        {nominee}  
+                                        <Button 
+                                        onClick={()=>remove(nominee)} 
+                                        variant="contained" 
+                                        color="secondary">
+                                            Nominate
+                                        </Button>
+                                    </ListItem>
+                                    )
+                                }
+                            )
+                            }
+                        </List>
+                    </div>
                 </Grid>
             </Grid>
             
