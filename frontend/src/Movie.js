@@ -38,18 +38,55 @@ function Movie() {
                 movie: movie
             }
         })
-        .then(response=>setMovies(response.data));
+        .then(response=>{
+            setMovies(
+                response.data.map((movie)=>{
+                    return(
+                        <ListItem 
+                        alignItems="center"
+                        key={movie}>
+                            <ListItemText alignItems="center">
+                                {movie[0]} 
+                            </ListItemText>
+                            <ListItem alignItems="center">
+                                <Button 
+                                onClick={()=>nominate(movie[0])} 
+                                variant="contained" 
+                                color="primary">
+                                    Nominate
+                                </Button>
+                            </ListItem>
+                        </ListItem>
+                    )
+                })
+            )
+        });
     }
     function nominate(nominee){
         setNominees(prev=>{
-            if(prev.includes(nominee)){
-                return [...prev]
-            } 
-            return [...prev,nominee]
+            if(prev.some(el=>el.key===nominee)){
+                return prev;
+            }
+            return ([...prev, 
+                (<ListItem
+                key={nominee}>
+                    <ListItemText>
+                        {nominee}  
+                    </ListItemText>
+                    <ListItem>
+                        <Button 
+                        onClick={()=>remove(nominee)} 
+                        variant="contained" 
+                        color="secondary">
+                            Remove
+                        </Button>
+                    </ListItem>
+                </ListItem>)]
+            )
         });
     }
     function remove(nominee){
-        setNominees(prev=>prev.filter(item=>item!==nominee));
+        setNominees(prev=>prev.filter(item=>item.key!==nominee));
     }
     return (
         <div className={classes.root}>
@@ -68,25 +105,7 @@ function Movie() {
                         {valueRef.current.value?<h1>Results for "{valueRef.current.value}":</h1>:<h1>Waiting on search</h1>}
                         <List>
                             {
-                            movies.map(
-                                (movie)=>{
-                                    return(
-                                    <ListItem 
-                                    alignItems="center"
-                                    key={movie}>
-                                        <ListItemText alignItems="center">
-                                            {movie} 
-                                        </ListItemText>
-                                        <ListItem alignItems="center">
-                                            <Button 
-                                            onClick={()=>nominate(movie)} 
-                                            variant="contained" 
-                                            color="primary">
-                                                Nominate
-                                            </Button>
-                                        </ListItem>
-                                    </ListItem>)
-                                })
+                            movies
                             }
                         </List>
                     </div>
@@ -96,25 +115,7 @@ function Movie() {
                         <h1>Nominations:</h1>
                         <List>
                             {
-                            nominees.map(
-                                (nominee)=>{
-                                    return (<ListItem
-                                    key={nominee}>
-                                        <ListItemText>
-                                            {nominee}  
-                                        </ListItemText>
-                                        <ListItem>
-                                            <Button 
-                                            onClick={()=>remove(nominee)} 
-                                            variant="contained" 
-                                            color="secondary">
-                                                Remove
-                                            </Button>
-                                        </ListItem>
-                                    </ListItem>
-                                    )
-                                }
-                            )
+                            nominees
                             }
                         </List>
                     </div>
