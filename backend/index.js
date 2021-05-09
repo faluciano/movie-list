@@ -5,7 +5,7 @@ const port = process.env.PORT || 5000;
 
 const result = require('dotenv').config({path:'../.env'}).parsed;
 const key = "OMDB_KEY" in process.env ?process.env.OMDB_KEY:result.OMDB_KEY;
-app.use(express.static(path.resolve(__dirname, '..client/build')));
+app.use(express.static(path.join(__dirname, '../client/build')));
 
 function getRating(id){
     return (axios.request({
