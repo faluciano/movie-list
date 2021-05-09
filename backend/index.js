@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const app = express();
-const port = 5000;
+const port = process.env.Port || 5000;
 
 const result = require('dotenv').config({path:'../.env'}).parsed;
 const key = "OMDB_KEY" in process.env ?process.env.OMDB_KEY:result.OMDB_KEY;
