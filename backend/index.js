@@ -4,7 +4,7 @@ const app = express();
 const port = 5000;
 
 const result = require('dotenv').config({path:'../.env'}).parsed;
-const key = result.OMDB_KEY;
+const key = "OMDB_KEY" in process.env ?process.env.OMDB_KEY:result.OMDB_KEY;
 
 function getRating(id){
     return (axios.request({
@@ -20,7 +20,7 @@ function getRating(id){
     );
 }
 
-function process(data) {
+function compute(data) {
     let procdat = data.Search.map(
         async (m)=>{
             const ret = await getRating(m.imdbID);
@@ -45,7 +45,7 @@ app.get("/movie", (req,res)=>{
             s:movie,
         }
     })
-        .then((response)=>"Error" in response.data?res.send(""):(process(response.data)
+        .then((response)=>"Error" in response.data?res.send(""):(compute(response.data)
             .then((val)=>res.send(val))))
         .catch((error)=>res.send(error))
 });
