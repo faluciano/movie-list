@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const app = express();
-const port = process.env.Port || 5000;
+const port = process.env.PORT || 5000;
 
 const result = require('dotenv').config({path:'../.env'}).parsed;
 const key = "OMDB_KEY" in process.env ?process.env.OMDB_KEY:result.OMDB_KEY;
@@ -50,4 +50,4 @@ app.get("/movie", (req,res)=>{
         .catch((error)=>res.send(error))
 });
 
-app.listen( port, ()=>console.log(`Running app on port localhost ${port}`));
+app.listen( port,'0.0.0.0',()=>console.log(`Running app on port localhost ${port}`));
