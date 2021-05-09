@@ -1,0 +1,23 @@
+{
+  "name": "movies",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-server": "cd ./backend && npm run start",
+    "start-client": "cd ./frontend && npm run start",
+    "build": "cd frontend && npm run build && npm install && cd ../backend && npm install",
+    "start": "cd backend && npm run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/faluciano/movie-list.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/faluciano/movie-list/issues"
+  },
+  "homepage": "https://github.com/faluciano/movie-list#readme"
+}
